@@ -1,8 +1,10 @@
-//continuation of ktest.c
-/*
-implement communication between two computers for play between people instead
-of generating random guesses from the computer
-*/
+//chris kopacz
+//battleship
+//run with:
+// ./game <ip> 0/1
+//         ^^ip of your friend
+//             ^^ player one enter 0 for third argument
+//             ^^ player two enter 1 for third argument
 #include <stdlib.h>
 #include <stdio.h>
 #include <string.h>
