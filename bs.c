@@ -337,11 +337,13 @@ int main(int argc, char *argv[])
 //=============================================================================
 void print_ship(struct Ships *ship)
 {
+  int i;
+
   if(ship->placed == 0)
   {
     printf("Ship name:\n %s\n",ship->name);
     printf("Location:\n");
-    for(int i=0;i<ship->length;i++)
+    for(i=0;i<ship->length;i++)
     {
       printf(" (%d,%d)",ship->row_coords[i],ship->col_coords[i]);
     }
