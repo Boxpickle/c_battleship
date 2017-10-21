@@ -8,7 +8,6 @@
 #include <stdlib.h>
 #include <stdio.h>
 #include <string.h>
-#include <time.h>
 #include <math.h>
 //from chat implementation
 #include <unistd.h>
@@ -72,7 +71,6 @@ void find_hit(struct Ships *a,struct Ships *b,struct Ships *c,struct Ships *d,
 
 int main(int argc, char *argv[])
 {
-  srand(time(NULL)); //make more random!
   //variables and such
   int my_grid[NUM_ROW][ROW_LEN];      //contains placement of my ships
   int my_guesses[NUM_ROW][ROW_LEN];   //contains my guesses against opponent
@@ -84,12 +82,15 @@ int main(int argc, char *argv[])
   int opp_col=-1;
   int opp_guess_out=-1;
   char my_guess[12];
-  int my_r_guess, my_c_guess;
+  int my_r_guess=-1;
+  int my_c_guess=-1;
+  int prev_guess=-1;
   char rec_buf[12];
-  int rec_r,rec_c,prev_guess;
+  int rec_r=-1;
+  int rec_c=-1;
 
-  //set TURN to equal argv[2]
-  int TURN = atoi(argv[2]);
+  //set TURN to equal argv[2]%2
+  int TURN = (atoi(argv[2]))%2;
 
   //initialize matrixes
   for(i=0;i<NUM_ROW;i++)
@@ -112,6 +113,22 @@ int main(int argc, char *argv[])
   struct Ships des;
   ship_declare(&des,"Destroyer",2,'D');
 
+  //print display grid for visualization
+  //(this grid wont be updated until after all ships have been placed)
+  system("clear");
+  printf("******* FOR DISPLAY ONLY\n\n");
+  printf("0 1 2 3 4 5 6 7 8 9\n");
+  printf("===================\n");
+  for(i=0;i<NUM_ROW;i++)
+  {
+    for(j=0;j<ROW_LEN;j++)
+    {
+      printf("%c ",my_grid_ch[i][j]);
+    }
+    printf(" | %d\n",i);
+  }
+  printf("\nIT WILL SHOW YOUR SHIPS AFTER THEY HAVE ALL BEEN PLACED\n\n");
+
   //place ships
   place_all_ships(&car,&bat,&cru,&sub,&des);
 
@@ -127,8 +144,10 @@ int main(int argc, char *argv[])
   //clear console
   system("clear");
 
+  //INITIAL PRINTING OF GRIDS*******
   //print my_grid (my ships)
   printf("MY SHIPS:\n");
+  printf("C=Carrier | B=Battleship | S=Submarine | U=Cruiser | D=Destroyer\n");
   printf("0 1 2 3 4 5 6 7 8 9\n");
   printf("===================\n");
   for(i=0;i<NUM_ROW;i++)
@@ -142,7 +161,6 @@ int main(int argc, char *argv[])
     }
     printf(" | %d\n",i);
   }
-  printf("LAST OPP GUESS: (%d,%d)\n",opp_row,opp_col);
   printf("==================== MY HEALTH = %d\n\n",MY_HEALTH);
 
   //print my_guesses (my guesses)
@@ -191,6 +209,11 @@ int main(int argc, char *argv[])
         if(my_guesses[my_r_guess][my_c_guess]==1)
         {//if it has been guessed, print a message
           printf("Already guessed. Go again.\n");
+        }else if(my_r_guess > 9 || my_r_guess < 0 || my_c_guess > 9 ||
+        my_c_guess < 0)
+        {
+          printf("TRY AGAIN.\n");
+          printf("r and c must be between 0 and 9 (inclusive).\n");
         }else
         {//if it hasnt been guessed already
           //update my_grid
@@ -244,11 +267,6 @@ int main(int argc, char *argv[])
 
     //clear console and print updated character grid
     system("clear");
-    /*if(TURN%2==0)
-    {
-      printf("sent to opponent: (%d,%d)\n",my_r_guess,my_c_guess);
-    }
-    */
 
     //print updated character grid -> my ships
     printf("MY SHIPS:\n");
@@ -262,8 +280,16 @@ int main(int argc, char *argv[])
       }
       printf(" | %d\n",i);
     }
-    //printf("LAST OPP GUESS: (%d,%d)\n",opp_row,opp_col);
-    printf("LAST OPP GUESS: (%d,%d)\n",rec_r,rec_c);
+    if(opp_guess_out == 1)
+    {
+      printf("LAST OPP GUESS: (%d,%d) -> HIT\n",rec_r,rec_c);
+    }else if(opp_guess_out == 0)
+    {
+      printf("LAST OPP GUESS: (%d,%d) -> MISS\n",rec_r,rec_c);
+    }else
+    {
+      printf("LAST OPP GUESS: (%d,%d) -> ?\n",rec_r,rec_c);
+    }
     printf("==================== MY HEALTH = %d\n\n",MY_HEALTH);
 
     //print updated character grid -> my guesses
@@ -278,6 +304,16 @@ int main(int argc, char *argv[])
       }
       printf(" | %d\n",i);
     }
+    if(prev_guess == 1)
+    {
+      printf("MY LAST GUESS: (%d,%d) -> HIT\n",my_r_guess,my_c_guess);
+    }else if(prev_guess == 0)
+    {
+      printf("MY LAST GUESS: (%d,%d) -> MISS\n",my_r_guess,my_c_guess);
+    }else
+    {
+      printf("MY LAST GUESS: (%d,%d) -> ?\n",my_r_guess,my_c_guess);
+    }
     printf("==================== OPPONENT HEALTH = %d\n\n",OPP_HEALTH);
 
     //iterate the turn counter
@@ -291,36 +327,6 @@ int main(int argc, char *argv[])
   {
     printf("\nYOU WIN!\n:)\n");
   }
-
-//leftover code from itest.c --> remove?
-  /*
-  for(i=0;i<NUM_ROW;i++)
-  {
-    opp_row=i;
-    opp_col=i;
-    opp_guess_out = check_opp_guess(my_grid[opp_row],opp_col);
-    if(opp_guess_out == 1)
-    {
-      MY_HEALTH = MY_HEALTH-1;
-      find_hit(&car,&bat,&cru,&sub,&des,opp_row,opp_col);
-      change_char_element(my_grid_ch[opp_row],opp_col,'x');
-    }else
-    {
-      change_char_element(my_grid_ch[opp_row],opp_col,'o');
-    }
-  }
-
-  //print simulation grids
-  for(i=0;i<NUM_ROW;i++)
-  {
-    for(j=0;j<ROW_LEN;j++)
-    {
-      printf("%c ",my_grid_ch[i][j]);
-    }
-    printf("\n");
-  }
-  printf("HEALTH = %d\n\n",MY_HEALTH);
-  */
 
   return 0;
 }
@@ -501,7 +507,7 @@ int check_placement(struct Ships *ship)
       SHIP_LET[i+PTR_OCC]=ship->letter;
     }
     PTR_OCC = PTR_OCC + ship->length;
-    printf("%s placed successfully.\n",ship->name);
+    printf("%s placed successfully.\n\n",ship->name);
   }
 
   return placement_ok;
