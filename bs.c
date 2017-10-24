@@ -125,12 +125,16 @@ int main(int argc, char *argv[])
     {
       printf("%c ",my_grid_ch[i][j]);
     }
-    printf(" | %d\n",i);
+    printf("| %d\n",i);
   }
   printf("\nIT WILL SHOW YOUR SHIPS AFTER THEY HAVE ALL BEEN PLACED\n\n");
 
   //place ships
   place_all_ships(&car,&bat,&cru,&sub,&des);
+
+  //create array of pointers containing the ships
+  //this will be used for printing ship health
+  struct Ships *all[] = {&car,&bat,&cru,&sub,&des};
 
   //update my_grid
   for(i=0;i<OCC_LEN;i++)
@@ -147,7 +151,7 @@ int main(int argc, char *argv[])
   //INITIAL PRINTING OF GRIDS*******
   //print my_grid (my ships)
   printf("MY SHIPS:\n");
-  printf("C=Carrier | B=Battleship | S=Submarine | U=Cruiser | D=Destroyer\n");
+  //printf("C=Carrier | B=Battleship | S=Submarine | U=Cruiser | D=Destroyer\n");
   printf("0 1 2 3 4 5 6 7 8 9\n");
   printf("===================\n");
   for(i=0;i<NUM_ROW;i++)
@@ -159,7 +163,16 @@ int main(int argc, char *argv[])
       //char's
       printf("%c ",my_grid_ch[i][j]);
     }
-    printf(" | %d\n",i);
+    //printf(" | %d\n",i);
+
+    if(i<5)
+    {
+      printf("| %d    (%c):%s = %d/%d\n",i,all[i]->letter,all[i]->name,
+              all[i]->health,all[i]->length);
+    }else
+    {
+      printf("| %d\n",i);
+    }
   }
   printf("==================== MY HEALTH = %d\n\n",MY_HEALTH);
 
@@ -173,7 +186,7 @@ int main(int argc, char *argv[])
     {
       printf("%c ",my_guesses_ch[i][j]);
     }
-    printf(" | %d\n",i);
+    printf("| %d\n",i);
   }
   printf("==================== OPPONENT HEALTH = %d\n\n",OPP_HEALTH);
 
