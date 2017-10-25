@@ -291,7 +291,16 @@ int main(int argc, char *argv[])
       {
         printf("%c ",my_grid_ch[i][j]);
       }
-      printf(" | %d\n",i);
+      if(i<5)
+      {
+        printf("| %d    (%c):%s = %d/%d\n",i,all[i]->letter,all[i]->name,
+                all[i]->health,all[i]->length);
+      }else
+      {
+        printf("| %d\n",i);
+      }
+
+      //printf("| %d\n",i);
     }
     if(opp_guess_out == 1)
     {
@@ -315,7 +324,7 @@ int main(int argc, char *argv[])
       {
         printf("%c ",my_guesses_ch[i][j]);
       }
-      printf(" | %d\n",i);
+      printf("| %d\n",i);
     }
     if(prev_guess == 1)
     {
