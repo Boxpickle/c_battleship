@@ -621,7 +621,7 @@ void find_hit(struct Ships *a, struct Ships *b,struct Ships *c,struct Ships *d,
   //check ship a
   for(i=0;i<a->length;i++)
   {
-    if(row=a->row_coords[i] && col==a->col_coords[i])
+    if(row==a->row_coords[i] && col==a->col_coords[i])
     {
       ship_hit(a);
     }
@@ -665,6 +665,7 @@ void find_hit(struct Ships *a, struct Ships *b,struct Ships *c,struct Ships *d,
 }
 //============
 //chat implementation functions
+//from beej's udp tutorial
 //=====
 void *get_in_addr(struct sockaddr *sa)
 {
