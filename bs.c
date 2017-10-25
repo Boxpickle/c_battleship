@@ -134,7 +134,16 @@ int main(int argc, char *argv[])
 
   //create array of pointers containing the ships
   //this will be used for printing ship health
-  struct Ships *all[5] = {&car,&bat,&cru,&sub,&des};
+  struct Ships *all[5];
+  for(i=0;i<5;i++)
+  {
+    all[i] = malloc(sizeof(struct Ships));
+  }
+  all[0] = &car;
+  all[1] = &bat;
+  all[2] = &cru;
+  all[3] = &sub;
+  all[4] = &des;
 
   //update my_grid
   for(i=0;i<OCC_LEN;i++)
