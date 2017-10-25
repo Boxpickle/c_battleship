@@ -359,6 +359,9 @@ int main(int argc, char *argv[])
     printf("\nYOU WIN!\n:)\n");
   }
 
+  //free malloc of array containing all ships -- used for printing
+  free(all);
+
   return 0;
 }
 
