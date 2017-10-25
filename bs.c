@@ -389,7 +389,8 @@ void print_ship(struct Ships *ship)
 //=====
 void ship_hit(struct Ships *ship)
 {
-  ship->health = ship->health - 1;
+  //ship->health = ship->health - 1;
+  ship->health--;
 
   if(ship->health == 0)
   {
