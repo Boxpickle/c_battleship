@@ -134,7 +134,7 @@ int main(int argc, char *argv[])
 
   //create array of pointers containing the ships
   //this will be used for printing ship health
-  struct Ships *all[] = {&car,&bat,&cru,&sub,&des};
+  struct Ships all[] = {car,bat,cru,sub,des};
 
   //update my_grid
   for(i=0;i<OCC_LEN;i++)
@@ -167,8 +167,8 @@ int main(int argc, char *argv[])
 
     if(i<5)
     {
-      printf("| %d    (%c):%s = %d/%d\n",i,all[i]->letter,all[i]->name,
-              all[i]->health,all[i]->length);
+      printf("| %d    (%c):%s = %d/%d\n",i,all[i].letter,all[i].name,
+              all[i].health,all[i].length);
     }else
     {
       printf("| %d\n",i);
@@ -293,8 +293,8 @@ int main(int argc, char *argv[])
       }
       if(i<5)
       {
-        printf("| %d    (%c):%s = %d/%d\n",i,all[i]->letter,all[i]->name,
-                all[i]->health,all[i]->length);
+        printf("| %d    (%c):%s = %d/%d\n",i,all[i].letter,all[i].name,
+                all[i].health,all[i].length);
       }else
       {
         printf("| %d\n",i);
@@ -358,7 +358,7 @@ int main(int argc, char *argv[])
 //user defined functions
 //=============================================================================
 void print_ship(struct Ships *ship)
-{
+{ //this function is unused in current implementation (?)
   int i;
 
   if(ship->placed == 0)
