@@ -392,10 +392,13 @@ void ship_hit(struct Ships *ship)
   //ship->health = ship->health - 1;
   ship->health--;
 
+  //this print function is not longer needed (?)
+  /*
   if(ship->health == 0)
   {
     printf("%s was destroyed\n\n",ship->name);
   }
+  */
 }
 //=====
 void ship_declare(struct Ships *ship,char *n,int h,char l)
